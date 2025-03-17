@@ -1,0 +1,13 @@
+node_modules/
+.vscode/
+/dist/
+diff-folder/
+
+.idea/
+
+yarn-error.log
+
+yarn.lock
+module.json
+
+.DS_Store
