@@ -27,4 +27,32 @@ jobs:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
     - run: npm ci
-    - run: npm run build --if-present
+    - name: Vite build
+      run: npm run build --if-present
+
+    - id: generate_manifest
+      run: |
+        cat module-template.json > module.json
+        
+    - name: Substitute Manifest and Download Links For Versioned Ones
+      id: sub_manifest_link_version
+      uses: restackio/update-json-file-action@2.1
+      with:
+        file: 'module.json'
+        fields: "{\"version\": \"${{env.VERSION}}\"}"
+
+      # create a zip file with all files required by the module to add to the release
+    - run: zip -r ./module.zip module.json dist
+      # Create a release for this specific version
+    - name: Update Release with Files
+      id: create_version_release
+      uses: ncipollo/release-action@v1
+      with:
+        allowUpdates: true # set this to false if you want to prevent updating existing releases
+        name: ${{github.event.release.name}}
+        draft: false
+        prerelease: false
+        token: ${{secrets.GITHUB_TOKEN}}
+        artifacts: './module.json, ./module.zip'
+        tag: ${{ github.event.release.tag_name }}
+        body: ${{ github.event.release.body }}
