@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "vite",
-    "build": "vite build && node src/gen-manifest.js"
+    "build": "vite build"
   },
   "keywords": [],
   "author": "",
