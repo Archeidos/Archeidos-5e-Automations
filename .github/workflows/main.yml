@@ -3,9 +3,7 @@
 
 name: CI
 
-on:
-  release:
-    types: [push]
+on: [push]
 
 jobs:
   build:
